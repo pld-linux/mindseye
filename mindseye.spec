@@ -16,7 +16,6 @@ BuildRequires:	OpenGL-devel
 BuildRequires:	qt-devel >= 3.0.5
 Buildroot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_prefix		/usr/X11R6
 
 %description
 This is the MindsEye project. The aim is a complete modeling/animation
