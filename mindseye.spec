@@ -1,22 +1,28 @@
+#
+# Conditional build:
 # _with_opencascade
-# _with_nurbs
+#
 %define		cvsbuild	cvs20020617
 Summary:	MindsEye - 3D modeler
 Summary(pl):	MindsEye - modeler 3D
 Name:		mindseye
 Version:	0.5.38
-Release:	1
+Release:	0.%{cvsbuild}.1
 License:	GPL
 Group:		X11/Applications/Graphics
-Source0:	http://sourceforge.net/%{name}/%{name}-%{cvsbuild}.tar.bz2
+Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{cvsbuild}.tar.bz2
 # Source0-md5:	3ff3ecf02ec0adfe28ce7e6e0b075723
+Patch0:		%{name}-gcc3.patch
+Patch1:		%{name}-qt.patch
+Patch2:		%{name}-fix.patch
 URL:		http://mindseye.sourceforge.net/
 BuildRequires:	OpenGL-devel
-%{?_with_nurbs++:BuildRequires:	nurbs++-devel}
+BuildRequires:	nurbs++-devel
 %{?_with_opencascade:BuildRequires:	opencascade-devel}
 BuildRequires:	qt-devel >= 3.0.5
 Buildroot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		_noautoreqdep	libGL.so.1 libGLU.so.1
 
 %description
 This is the MindsEye project. The aim is a complete modeling/animation
@@ -38,24 +44,33 @@ na ka¿dym aktualnie dostêpnym systemie X Window.
 
 %prep
 %setup -q -n %{name}-%{cvsbuild}
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
-./configure \
-	%{?_with_nurbs++:--with-NURBS-prefix= } \
+%configure2_13 \
 	%{?_with_opencascade:--with-OOC-prefix=}
+
 %{__make} mindseye
 
-# documentation
-%{__make} doc-all
+# documentation (but no doc dir)
+#%{__make} doc-all
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__make} prefix=$RPM_BUILD_ROOT%{_prefix} install
+
+# no install target yet
+#%{__make} install prefix=$RPM_BUILD_ROOT%{_prefix}
+
+install -d $RPM_BUILD_ROOT%{_bindir}
+install src/MindsEye $RPM_BUILD_ROOT%{_bindir}
+# some files missing?
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc
-%attr(,,)
+%doc Bugs ChangeLog Contributors README
+%attr(755,root,root) %{_bindir}/*
