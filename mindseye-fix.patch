@@ -1,0 +1,11 @@
+--- mindseye-cvs20020617/src/nurbsedit/SkinSurf.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/nurbsedit/SkinSurf.cpp	Mon Jun  9 10:22:09 2003
+@@ -39,7 +39,7 @@
+ SkinSurfWidget::SkinSurfWidget( QWidget *parent, const char *name) :
+   QWidget(parent, name)
+ {
+-  initMetaObject();
++  //initMetaObject();
+   setMinimumSize(200,150);
+   setMaximumSize(200,150);
+ 

@@ -1,0 +1,563 @@
+--- mindseye-cvs20020617/src/3dlib/g_array.h.orig	Mon Jun 17 21:49:22 2002
++++ mindseye-cvs20020617/src/3dlib/g_array.h	Mon Jun  9 08:28:01 2003
+@@ -41,7 +41,7 @@
+     may be requested when they are removed from the list. Default: is off.
+     This feature is the main reason for overloading the base STL class.
+ */
+-class G3D_Array : public vector<void*>
++class G3D_Array : public std::vector<void*>
+ {
+ public:
+   /// Constructor.
+--- mindseye-cvs20020617/src/3dlib/g_array.cpp.orig	Mon Jun 17 21:49:22 2002
++++ mindseye-cvs20020617/src/3dlib/g_array.cpp	Mon Jun  9 08:31:45 2003
+@@ -37,6 +37,8 @@
+ #include "g_operator.h"
+ #include "object.h"
+ 
++using namespace std;
++
+ void
+ G3D_Array::doWithConstElements ( G3D_Operator &op ) const
+ {
+--- mindseye-cvs20020617/src/material/m_mat.h.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/material/m_mat.h	Mon Jun  9 08:40:17 2003
+@@ -98,7 +98,7 @@
+ 
+    int         active_;    //number of active preview widget
+ 
+-   static vector<void*> MaterialWidgets_;
++   static std::vector<void*> MaterialWidgets_;
+ };
+ 
+ #endif
+--- mindseye-cvs20020617/src/material/m_mat.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/material/m_mat.cpp	Mon Jun  9 08:40:43 2003
+@@ -48,6 +48,8 @@
+ #include "m_matv.h"
+ #include "previewer.h"
+ 
++using namespace std;
++
+ vector<void*> MEMaterialEditor::MaterialWidgets_;
+ 
+ /*---------------------------------------------------------------------------*/
+--- mindseye-cvs20020617/src/output/renderqueue.h.orig	Mon Jun 17 21:49:24 2002
++++ mindseye-cvs20020617/src/output/renderqueue.h	Mon Jun  9 09:40:49 2003
+@@ -124,7 +124,7 @@
+ 
+   int flags_; //z.b. rendern im Hintergrund, ...
+   //vector<MERenderHost> hostList_;
+-  deque<MERenderJob*>  jobQueue_;
++  std::deque<MERenderJob*>  jobQueue_;
+   MERenderJob          *activeJob_;
+ 
+   //char *command_;  //how to call the render engine
+--- mindseye-cvs20020617/src/kernel/core.h.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/kernel/core.h	Mon Jun  9 09:42:05 2003
+@@ -144,19 +144,19 @@
+   //TODO vector<void*>& getAttributeWidgets ();
+   
+   ///Return the list of registered object categories.
+-  vector<const char*>& getObjectCategories ();
++  std::vector<const char*>& getObjectCategories ();
+   
+   ///Return a range of objects in the same category.
+-  pair<MmumapItr,MmumapItr> getObjectList( const char* ) const;
++  std::pair<MmumapItr,MmumapItr> getObjectList( const char* ) const;
+   
+   ///
+   const char* getObjTypename ( const char *desc );
+   
+   /// Query a list of installed palette widgets.
+-  void getPaletteWidgets ( uint, QWidget *p, vector<void*> &list );
++  void getPaletteWidgets ( uint, QWidget *p, std::vector<void*> &list );
+   
+   /// Return the list of installed render queues.
+-  vector<void*>& getRenderQueues ();
++  std::vector<void*>& getRenderQueues ();
+   
+   /// Return the world list.
+   MWorldList& getWorldList () { return worldList_; }
+@@ -258,8 +258,8 @@
+   multimap<const char*, const char*, ltstr>  category2Desc_;
+   multimap<uint, void*>                 paletteWidgets_;
+   //multimap<t_type, void*>             menuCommands_;
+-  vector<const char*>                   objectCategories_;
+-  vector<void*>                         renderQueues_;
++  std::vector<const char*>              objectCategories_;
++  std::vector<void*>                    renderQueues_;
+   
+   ExecuteScriptFunc                     *execScriptFunc_;
+   
+--- mindseye-cvs20020617/src/kernel/world_list.h.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/kernel/world_list.h	Mon Jun  9 09:40:12 2003
+@@ -7,10 +7,10 @@
+ class G3DCamera;
+ 
+ template<class T>
+-class MeTypedVector : public vector<void*>
++class MeTypedVector : public std::vector<void*>
+ {
+ public:
+-  T*  operator[](int i ) { return (T*)(vector<void*>::operator[](i)); }
++  T*  operator[](int i ) { return (T*)(std::vector<void*>::operator[](i)); }
+ };
+ 
+ typedef MeTypedVector<MWorldObject> MWorldList;
+--- mindseye-cvs20020617/src/dialogs/output/renderDlg.cpp.orig	Mon Jun 17 21:49:22 2002
++++ mindseye-cvs20020617/src/dialogs/output/renderDlg.cpp	Mon Jun  9 09:42:36 2003
+@@ -44,6 +44,8 @@
+ 
+ #define Inherited MERenderDialogData
+ 
++using namespace std;
++
+ //TODO get this from configuration
+ static const char *ResolutionList[] =
+ { "320x240", "640x480", "800x600", "NTSC", "PAL" };
+--- mindseye-cvs20020617/src/kernel/plugin/dll.h.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/kernel/plugin/dll.h	Mon Jun  9 09:44:16 2003
+@@ -80,7 +80,7 @@
+   void      loadDll(const char *);
+ 
+ protected:
+-  vector<void*> plugins_;
++  std::vector<void*> plugins_;
+ 
+ };
+ 
+--- mindseye-cvs20020617/src/modeler/edit_widget.h.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/edit_widget.h	Mon Jun  9 09:48:13 2003
+@@ -76,7 +76,7 @@
+   QLabel           *typeName_;
+   QPushButton      *setBtn_, *findBtn_;
+ 
+-  vector<void*>    widgets_;
++  std::vector<void*>    widgets_;
+   MEPaletteFrame   *trafoFrame_;
+ 
+ };
+--- mindseye-cvs20020617/src/modeler/attrib_widget.h.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/attrib_widget.h	Mon Jun  9 09:48:25 2003
+@@ -78,7 +78,7 @@
+   QPushButton   *addButton_;
+ 
+   int            yWidgets_;
+-  vector<void*>  widgets_;
++  std::vector<void*>  widgets_;
+ 
+   MModeler        *model_;
+   QObject         *world_;
+--- mindseye-cvs20020617/src/modeler/animWidget.h.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/animWidget.h	Mon Jun  9 09:49:12 2003
+@@ -138,7 +138,7 @@
+   MEStatusBar  *sbar_;
+ 
+   float            time_;
+-  set<float, lflt> keyList_;
++  std::set<float, lflt> keyList_;
+ 
+ };
+ 
+--- mindseye-cvs20020617/src/modeler/tabwidget.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/tabwidget.cpp	Mon Jun  9 09:53:45 2003
+@@ -29,10 +29,13 @@
+ #include <qscrollbar.h>
+ #include <qtabbar.h>
+ #include "tabwidget.h"
++#include <iostream>
+ 
+ //TODO
+ #define WIDGET_HEIGHT 2000
+ 
++using namespace std;
++
+ MeTabChild::MeTabChild( QWidget *parent ) :
+   QWidget(parent)
+ {
+--- mindseye-cvs20020617/src/modeler/view_widget.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/view_widget.cpp	Mon Jun  9 09:54:20 2003
+@@ -33,6 +33,8 @@
+ #include "cameraPool.h"
+ #include <iostream>
+ 
++using namespace std;
++
+ MEViewWidget::MEViewWidget( QObject *modeler, QWidget *parent )
+   : MeTabChild(parent) //QWidget(parent)
+ {
+--- mindseye-cvs20020617/src/modeler/create_widget.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/create_widget.cpp	Mon Jun  9 09:56:29 2003
+@@ -35,6 +35,7 @@
+ #include "nurbsTools.h"
+ #include "modeler.h"
+ 
++using namespace std;
+ 
+ /*
+ There are two ways to creat objects:
+--- mindseye-cvs20020617/src/modeler/coneFrame.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/coneFrame.cpp	Mon Jun  9 09:58:04 2003
+@@ -36,6 +36,7 @@
+ #include "factories.h"
+ #include <vector>
+ 
++using namespace std;
+ 
+ void
+ createConeWidget( vector<void*> *list, QWidget *p )
+--- mindseye-cvs20020617/src/modeler/factories.h.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/factories.h	Mon Jun  9 10:00:46 2003
+@@ -27,25 +27,27 @@
+ #ifndef _FACTORIES_H_
+ #define _FACTORIES_H_
+ 
++#include <vector>
++
+ class QFrame;
+ class QWidget;
+ 
+-extern void createMaterialWidget( vector<void*>*, QWidget* );
++extern void createMaterialWidget( std::vector<void*>*, QWidget* );
+ 
+-extern void createConeWidget( vector<void*>*, QWidget* );
+-extern void createMeshWidget( vector<void*>*, QWidget* );
+-extern void createPolygonWidget( vector<void*>*, QWidget* );
+-extern void createSceneInfo( vector<void*>*, QWidget* );
+-extern void createSphereWidget( vector<void*>*, QWidget* );
+-extern void createTorusWidget( vector<void*>*, QWidget* );
+-extern void createTrigridWidget( vector<void*>*, QWidget* );
+-
+-extern void createLightWidget( vector<void*>*, QWidget* );
+-extern void createPLightWidget( vector<void*>*, QWidget* );
+-
+-extern void createAnimationWidget( vector<void*>*, QWidget* );
+-extern void createSpinWidget( vector<void*>*, QWidget* );
+-extern void createUrlWidget( vector<void*>*, QWidget* );
++extern void createConeWidget( std::vector<void*>*, QWidget* );
++extern void createMeshWidget( std::vector<void*>*, QWidget* );
++extern void createPolygonWidget( std::vector<void*>*, QWidget* );
++extern void createSceneInfo( std::vector<void*>*, QWidget* );
++extern void createSphereWidget( std::vector<void*>*, QWidget* );
++extern void createTorusWidget( std::vector<void*>*, QWidget* );
++extern void createTrigridWidget( std::vector<void*>*, QWidget* );
++
++extern void createLightWidget( std::vector<void*>*, QWidget* );
++extern void createPLightWidget( std::vector<void*>*, QWidget* );
++
++extern void createAnimationWidget( std::vector<void*>*, QWidget* );
++extern void createSpinWidget( std::vector<void*>*, QWidget* );
++extern void createUrlWidget( std::vector<void*>*, QWidget* );
+ 
+ #endif
+ 
+--- mindseye-cvs20020617/src/modeler/materialFrame.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/materialFrame.cpp	Mon Jun  9 10:01:26 2003
+@@ -38,6 +38,8 @@
+ #include "materialFrame.h"
+ #include "factories.h"
+ 
++using namespace std;
++
+ //static MEMaterialFrame instance_;
+ 
+ void
+--- mindseye-cvs20020617/src/modeler/torusFrame.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/torusFrame.cpp	Mon Jun  9 10:02:03 2003
+@@ -35,6 +35,7 @@
+ #include "factories.h"
+ #include <vector>
+ 
++using namespace std;
+ 
+ void
+ createTorusWidget( vector<void*> *list, QWidget *p )
+--- mindseye-cvs20020617/src/modeler/sphereFrame.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/sphereFrame.cpp	Mon Jun  9 10:02:34 2003
+@@ -34,6 +34,8 @@
+ #include "kernel/world_obj.h"
+ #include "factories.h"
+ 
++using namespace std;
++
+ void
+ createSphereWidget( vector<void*> *list, QWidget *p )
+ {
+--- mindseye-cvs20020617/src/modeler/spinFrame.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/spinFrame.cpp	Mon Jun  9 10:04:03 2003
+@@ -35,6 +35,7 @@
+ #include "kernel/world_obj.h"
+ #include "dialogs/vedit.h"
+ 
++using namespace std;
+ 
+ MESpinFrame::MESpinFrame( QWidget *p ) :
+   MEPaletteFrame( "Spin Parameter", NULL, p)
+--- mindseye-cvs20020617/src/modeler/lightFrame.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/lightFrame.cpp	Mon Jun  9 10:04:53 2003
+@@ -39,6 +39,7 @@
+ #include "factories.h"
+ #include <vector>
+ 
++using namespace std;
+ 
+ void
+ createLightWidget( vector<void*> *list, QWidget *p )
+--- mindseye-cvs20020617/src/modeler/polygonFrame.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/polygonFrame.cpp	Mon Jun  9 10:05:40 2003
+@@ -36,6 +36,7 @@
+ #include "factories.h"
+ #include <vector>
+ 
++using namespace std;
+ 
+ void
+ createPolygonWidget( vector<void*> *list, QWidget *p )
+--- mindseye-cvs20020617/src/modeler/plightFrame.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/plightFrame.cpp	Mon Jun  9 10:06:17 2003
+@@ -37,6 +37,7 @@
+ #include "factories.h"
+ #include <vector>
+ 
++using namespace std;
+ 
+ void
+ createPLightWidget( vector<void*> *list, QWidget *p )
+--- mindseye-cvs20020617/src/modeler/trigridFrame.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/trigridFrame.cpp	Mon Jun  9 10:07:43 2003
+@@ -36,6 +36,7 @@
+ #include "factories.h"
+ #include <vector>
+ 
++using namespace std;
+ 
+ void
+ createTrigridWidget( vector<void*> *list, QWidget *p )
+--- mindseye-cvs20020617/src/modeler/sceneInfo.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/sceneInfo.cpp	Mon Jun  9 10:09:07 2003
+@@ -40,6 +40,7 @@
+ #include "sceneInfo.h"
+ #include <vector>
+ 
++using namespace std;
+ 
+ void
+ createSceneInfo( vector<void*> *list, QWidget *p )
+--- mindseye-cvs20020617/src/modeler/meshFrame.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/meshFrame.cpp	Mon Jun  9 10:09:48 2003
+@@ -36,6 +36,7 @@
+ #include "factories.h"
+ #include <vector>
+ 
++using namespace std;
+ 
+ void
+ createMeshWidget( vector<void*> *list, QWidget *p )
+--- mindseye-cvs20020617/src/io/io_base.h.orig	Mon Jun 17 21:49:22 2002
++++ mindseye-cvs20020617/src/io/io_base.h	Mon Jun  9 10:26:46 2003
+@@ -41,7 +41,7 @@
+ class G3DScene;
+ class MEFilter;
+ 
+-typedef MEFilter* THookFkt( void*, ostream& );
++typedef MEFilter* THookFkt( void*, std::ostream& );
+ 
+ /**
+ The types of the objects that could be written by a filter is not know a priori.
+@@ -55,7 +55,7 @@
+   virtual MEFilter* createFilter() = 0;
+   void      addObjectHook( int, THookFkt );
+   int       getID () const { return id_; }
+-  virtual void writeObject ( int id, G3DObject*, ostream& ) = 0;
++  virtual void writeObject ( int id, G3DObject*, std::ostream& ) = 0;
+ 
+ public:
+   const char *name;
+@@ -63,7 +63,7 @@
+ 
+ protected:
+   int id_;
+-  map<int, void*> objectHooks_;
++  std::map<int, void*> objectHooks_;
+   //hookList_[id] = func;
+ 
+ };
+--- mindseye-cvs20020617/src/io/ioModule.cpp.orig	Mon Jun 17 21:49:22 2002
++++ mindseye-cvs20020617/src/io/ioModule.cpp	Mon Jun  9 10:27:21 2003
+@@ -50,6 +50,7 @@
+ 
+ #include <vector>
+ 
++using namespace std;
+ 
+ static vector<void*> *IoFilterList_ = NULL;
+ 
+--- mindseye-cvs20020617/src/output/pov_queue.cpp.orig	Mon Jun 17 21:49:24 2002
++++ mindseye-cvs20020617/src/output/pov_queue.cpp	Mon Jun  9 10:28:59 2003
+@@ -33,12 +33,15 @@
+ #include <sys/stat.h>
+ #include <sys/wait.h>
+ #include <fcntl.h>
++#include <iostream>
+ 
+ #include "pov_queue.h"
+ #include "renderjob.h"
+ #include "io/ioModule.h"
+ #include "io/io_base.h"
+ 
++using namespace std;
++
+ bool saveScene ( MWorldObject* );
+ 
+ 
+--- mindseye-cvs20020617/src/shaper/objects.h.orig	Mon Jun 17 21:49:24 2002
++++ mindseye-cvs20020617/src/shaper/objects.h	Mon Jun  9 10:31:18 2003
+@@ -64,13 +64,13 @@
+   G3DObject*     getCurve ();
+   G3DPoint3d&    getPoint( int );
+   void           movePoint( int, const TVector<MeFloat,3>& );
+-  vector<void*>& pointList () { return points_; }
++  std::vector<void*>& pointList () { return points_; }
+   int            numberOfPoints () { return points_.size(); }
+   MeFloat        select ( MeFloat mx, MeFloat my );
+   MeFloat        selectPoint ( MeFloat mx, MeFloat my, int& );
+ 
+ protected:
+-  vector<void*> points_;
++  std::vector<void*> points_;
+   G3DNurbsCurve *curve_;
+   bool          closed_;
+   bool          showLine_;
+--- mindseye-cvs20020617/src/shaper/shaper.h.orig	Mon Jun 17 21:49:24 2002
++++ mindseye-cvs20020617/src/shaper/shaper.h	Mon Jun  9 10:31:27 2003
+@@ -103,7 +103,7 @@
+   int   modified;
+   float apError_;
+ 
+-  vector<void*> shapes_;
++  std::vector<void*> shapes_;
+ 
+   MEDrawingWidget *drawArea_;
+   QLabel          *previewLabel;
+--- mindseye-cvs20020617/src/shaper/viewport.h.orig	Mon Jun 17 21:49:24 2002
++++ mindseye-cvs20020617/src/shaper/viewport.h	Mon Jun  9 10:30:13 2003
+@@ -51,7 +51,7 @@
+ public:
+   enum EditMode { AppendPoint, FreeHand, EditCurve };
+ 
+-  MEDrawingWidget ( vector<void*>&, QWidget *parent=0 );
++  MEDrawingWidget ( std::vector<void*>&, QWidget *parent=0 );
+   virtual ~MEDrawingWidget ();
+ 
+   MELineObject* getSelectedShape () { return activeShape_; }
+@@ -85,7 +85,7 @@
+   void round ( float &x, float &y );
+   
+ protected:
+-  vector<void*> &shapes_;
++  std::vector<void*> &shapes_;
+   MELineObject  *activeShape_;
+   int            activePoint_;
+ 
+--- mindseye-cvs20020617/src/shaper/viewport.cpp.orig	Mon Jun 17 21:49:24 2002
++++ mindseye-cvs20020617/src/shaper/viewport.cpp	Mon Jun  9 10:33:22 2003
+@@ -38,6 +38,8 @@
+ #include "viewport.h"
+ #include "objects.h"
+ 
++using namespace std;
++
+ MEDrawingWidget::MEDrawingWidget ( vector<void*> &shapes, QWidget *parent )
+   : QFrame(parent), shapes_(shapes)
+ {
+@@ -94,7 +96,7 @@
+     p->drawLine (x, height()/2, x, -height()/2);
+   }
+   else if( gridType_ == Polar ) {
+-    int r = int (sqrt((x*x) + (y*y)));
++    int r = int (::sqrt((x*x) + (y*y)));
+     p->drawEllipse (-r, -r, 2*r, 2*r);
+   }
+ }
+--- mindseye-cvs20020617/src/shaper/grid2d.cpp.orig	Mon Jun 17 21:49:24 2002
++++ mindseye-cvs20020617/src/shaper/grid2d.cpp	Mon Jun  9 10:34:48 2003
+@@ -43,14 +43,14 @@
+   if( gridMode_ == Cartesian )
+     {
+       step_a = QString( dxEdit_->text() ).toFloat();
+-      step_a = max( 1.0/200.0, step_a );
++      step_a = max( (float)(1.0/200.0), step_a );
+       step_b = QString( dyEdit_->text() ).toFloat();
+-      step_b = max( 1.0/200.0, step_b );
++      step_b = max( (float)(1.0/200.0), step_b );
+     }
+   else
+     {
+       step_a = QString( radiusEdit_->text() ).toFloat();
+-      step_a = max( 1.0/200.0, step_a );
++      step_a = max( (float)(1.0/200.0), step_a );
+       step_b = QString( angleEdit_->text() ).toFloat();
+       step_b = max( deg2rad(1), deg2rad(step_b) );
+     }
+--- mindseye-cvs20020617/src/kernel/plugin/dll.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/kernel/plugin/dll.cpp	Mon Jun  9 10:38:04 2003
+@@ -36,10 +36,13 @@
+ #include <dirent.h>
+ #include <errno.h>
+ #include <stdio.h>
++#include <iostream>
+ 
+ #include "dll.h"
+ #include "classinfo.h"
+ 
++using namespace std;
++
+ class MCore;
+ extern MCore *Kernel;
+ 
+--- mindseye-cvs20020617/src/kernel/core.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/kernel/core.cpp	Mon Jun  9 10:46:46 2003
+@@ -60,6 +60,8 @@
+ #include <qwindowsstyle.h>
+ // #include <qplatinumstyle.h>
+ 
++using namespace std;
++
+ static void scanRegion ( pair<MmumapIItr,MmumapIItr> &r, QWidget *p,
+                          vector<void*> &list );
+ 
+--- mindseye-cvs20020617/src/main.cpp.orig	Mon Jun 17 21:49:22 2002
++++ mindseye-cvs20020617/src/main.cpp	Mon Jun  9 10:55:02 2003
+@@ -56,9 +56,9 @@
+ */
+ 
+ const char * CopyrightMessage =
+-"MindsEye comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
+-This is free software, and you are welcome to redistribute it
+-under certain conditions; type `show c' for details.";
++"MindsEye comes with ABSOLUTELY NO WARRANTY; for details type `show w'.\n"
++"This is free software, and you are welcome to redistribute it\n"
++"under certain conditions; type `show c' for details.";
+ 
+ // template class QArrayT<char>;
+ 
+--- mindseye-cvs20020617/src/dialogs/grid/GridDialog.cpp.orig	Mon Jun 17 21:49:22 2002
++++ mindseye-cvs20020617/src/dialogs/grid/GridDialog.cpp	Mon Jun  9 11:15:42 2003
+@@ -8,7 +8,7 @@
+  *********************************************************************/
+ 
+ #include <iostream.h>
+-#include <strstream.h>
++#include <strstream>
+ #include <iomanip.h>
+ 
+ #include "include/config.h"
+@@ -17,6 +17,7 @@
+ 
+ #define Inherited GridDialogData
+ 
++using namespace std;
+ 
+ GridDialog::GridDialog
+ (

@@ -1,0 +1,77 @@
+--- mindseye-cvs20020617/src/material/qglpix.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/material/qglpix.cpp	Mon Jun  9 09:12:00 2003
+@@ -28,10 +28,10 @@
+  */
+ 
+ 
++#include "qglpix.h"
+ #include <GL/gl.h>
+ #include <GL/glu.h>
+ #include <GL/glx.h>
+-#include "qglpix.h"
+ #include <iostream.h>
+ #include <stdio.h>
+ 
+--- mindseye-cvs20020617/src/dialogs/about/about_dlgd.cpp.orig	Mon Jun 17 21:49:22 2002
++++ mindseye-cvs20020617/src/dialogs/about/about_dlgd.cpp	Mon Jun  9 09:23:54 2003
+@@ -57,7 +57,7 @@
+ 		QFont font( "Fixed", 10, 75, 0 );
+ 		font.setFixedPitch( TRUE );
+ 		font.setStyleHint( (QFont::StyleHint)0 );
+-		font.setCharSet( (QFont::CharSet)0 );
++		//font.setCharSet( (QFont::CharSet)0 );
+ 		dlgedit_ListBox_1->setFont( font );
+ 	}
+ 	dlgedit_ListBox_1->setFrameStyle( 51 );
+@@ -87,7 +87,7 @@
+ 	{
+ 		QFont font( "helvetica", 18, 50, 0 );
+ 		font.setStyleHint( (QFont::StyleHint)0 );
+-		font.setCharSet( (QFont::CharSet)0 );
++		//font.setCharSet( (QFont::CharSet)0 );
+ 		_versionText->setFont( font );
+ 	}
+ 	_versionText->setText( "test" );
+--- mindseye-cvs20020617/src/modeler/tabwidget.cpp.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/modeler/tabwidget.cpp	Mon Jun  9 09:53:45 2003
+@@ -58,7 +61,7 @@
+ MeTabWidget::addTab( int mode, MeTabChild* w, const QString &name )
+ {
+   QTab *t = new QTab;
+-  t->label = name;
++  t->setText(name);
+   w->id_   = tab_->addTab( t );
+   w->mode_ = mode;
+   widgets_[size_++] = w;
+--- mindseye-cvs20020617/src/kernel/console.h.orig	Mon Jun 17 21:49:23 2002
++++ mindseye-cvs20020617/src/kernel/console.h	Mon Jun  9 10:46:21 2003
+@@ -33,7 +33,7 @@
+ #include "include/config.h"
+ 
+ #include <qlined.h>
+-#include <qmlined.h>
++#include <qmultilineedit.h>
+ #include <qwidget.h>
+ #include <qlayout.h>
+ 
+--- mindseye-cvs20020617/src/kernel/core.cpp.orig1	Mon Jun  9 10:46:46 2003
++++ mindseye-cvs20020617/src/kernel/core.cpp	Mon Jun  9 10:59:20 2003
+@@ -57,8 +57,6 @@
+ #include "plugin/dll.h"
+ #include "initialize.h"
+ #include <qgl.h>
+-#include <qwindowsstyle.h>
+-// #include <qplatinumstyle.h>
+ 
+ using namespace std;
+ 
+@@ -595,8 +593,7 @@
+   // >------------ set widget style to "Windows"
+   
+   mindseye_app->setFont (*app_font, true);
+-  QWindowsStyle * style = new QWindowsStyle ();
+-  mindseye_app->setStyle (style);
++  mindseye_app->setStyle ( "Windows" );
+   
+   // >------------ QApplication for MindsEye should be setup now
+   
