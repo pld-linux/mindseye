@@ -9,6 +9,7 @@ Release:	1
 License:	GPL
 Group:		X11/Applications/Graphics
 Source0:	http://sourceforge.net/%{name}/%{name}-%{cvsbuild}.tar.bz2
+# Source0-md5:	3ff3ecf02ec0adfe28ce7e6e0b075723
 URL:		http://mindseye.sourceforge.net/
 BuildRequires:	OpenGL-devel
 %{?_with_nurbs++:BuildRequires:	nurbs++-devel}
