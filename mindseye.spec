@@ -4,7 +4,7 @@
 #
 %define		cvsbuild	cvs20020617
 Summary:	MindsEye - 3D modeler
-Summary(pl):	MindsEye - modeler 3D
+Summary(pl.UTF-8):   MindsEye - modeler 3D
 Name:		mindseye
 Version:	0.5.38
 Release:	0.%{cvsbuild}.1
@@ -33,14 +33,14 @@ idea here is to create a total package which can be configured to do
 all the major 3d-tasks you need. It is supposed to run on any X Window
 system currently available.
 
-%description -l pl
+%description -l pl.UTF-8
 To jest projekt MindsEye. Jego celem jest stworzenie kompletnego
 pakietu do modelowania i animacji dla Linuksa. Innym celem jest
-po³±czenie si³ je¶li chodzi o programowanie 3D. Aktualnie istnieje
-wiele specjalizowanych pakietów, które mog± wykonywaæ konkretne
-zadania 3D. Idea jest taka, by stworzyæ pe³ny pakiet, który mo¿e byæ
-skonfigurowany do wykonywania wszystkich g³ównych zadañ 3D. Ma dzia³aæ
-na ka¿dym aktualnie dostêpnym systemie X Window.
+poÅ‚Ä…czenie siÅ‚ jeÅ›li chodzi o programowanie 3D. Aktualnie istnieje
+wiele specjalizowanych pakietÃ³w, ktÃ³re mogÄ… wykonywaÄ‡ konkretne
+zadania 3D. Idea jest taka, by stworzyÄ‡ peÅ‚ny pakiet, ktÃ³ry moÅ¼e byÄ‡
+skonfigurowany do wykonywania wszystkich gÅ‚Ã³wnych zadaÅ„ 3D. Ma dziaÅ‚aÄ‡
+na kaÅ¼dym aktualnie dostÄ™pnym systemie X Window.
 
 %prep
 %setup -q -n %{name}-%{cvsbuild}
