@@ -4,7 +4,7 @@
 #
 %define		cvsbuild	cvs20020617
 Summary:	MindsEye - 3D modeler
-Summary(pl.UTF-8):   MindsEye - modeler 3D
+Summary(pl.UTF-8):	MindsEye - modeler 3D
 Name:		mindseye
 Version:	0.5.38
 Release:	0.%{cvsbuild}.1
