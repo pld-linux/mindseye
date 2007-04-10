@@ -19,7 +19,7 @@ URL:		http://mindseye.sourceforge.net/
 BuildRequires:	OpenGL-devel
 BuildRequires:	nurbs++-devel
 %{?_with_opencascade:BuildRequires:	opencascade-devel}
-BuildRequires:	qt-devel >= 3.0.5
+BuildRequires:	qt-devel >= 3:3.0.5
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_noautoreqdep	libGL.so.1 libGLU.so.1
